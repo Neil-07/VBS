@@ -64,17 +64,20 @@ public class UserController {
     @PostMapping("/update")
     public String update(@RequestBody UpdateDto obj)
     {
+        History h1 = new History();
         User user = userRepo.findById(obj.getId())
                 .orElseThrow(()-> new RuntimeException("Not found"));
         if(obj.getKey().equalsIgnoreCase("name"))
         {
             if(obj.getValue().equals(user.getName())) return "Cannot be same";
             user.setName(obj.getValue());
+            h1.setDescription(user.getUsername()+" Changed their name to "+obj.getValue());
         }
         else if(obj.getKey().equalsIgnoreCase("password"))
         {
             if(obj.getValue().equals(user.getPassword())) return "Cannot be same";
             user.setPassword(obj.getValue());
+            h1.setDescription(user.getUsername()+" Changed their password");
         }
         else if(obj.getKey().equalsIgnoreCase("email"))
         {
@@ -82,12 +85,14 @@ public class UserController {
             User user2 = userRepo.findByEmail(obj.getValue());
             if(user2 != null) return "Email already Exists";
             user.setEmail(obj.getValue());
+            h1.setDescription(user.getUsername()+" Changed their email to "+obj.getValue());
         }
         else
         {
             return "Invalid Key";
         }
         userRepo.save(user);
+        historyRepo.save(h1);
         return "Updated Successfully";
     }
 
