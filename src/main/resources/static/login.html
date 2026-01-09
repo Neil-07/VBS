@@ -174,6 +174,7 @@
           <option value="">Select Role</option>
           <option value="customer">Customer</option>
           <option value="admin">Admin</option>
+          <option value="manager">Manager</option>
         </select>
       </div>
 
@@ -228,9 +229,13 @@ const role = loginData.role.trim().toLowerCase();
 localStorage.setItem("role", role);
 
 setTimeout(() => {
-if (role === "admin") {
+if (role == "admin") {
   window.location.href = `admin.html?id=${result}`;
-} else {
+}
+else if (role == "manager") {
+  window.location.href = `manager.html?id=${result}`
+}
+ else {
   window.location.href = `dashboard.html?id=${result}`;
 }
 }, 800);

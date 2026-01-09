@@ -99,8 +99,11 @@ public class UserController {
     @PostMapping("/add/{adminId}")
     public String add(@RequestBody User user, @PathVariable int adminId)
     {
+        User user3 = userRepo.findById(adminId)
+                .orElseThrow(()-> new RuntimeException("User not found"));
+        String role = user3.getRole();
         History h1 = new History();
-        h1.setDescription("Admin "+adminId+" Created user "+user.getUsername());
+        h1.setDescription(role+" "+user3.getName()+" Created user "+user.getName());
         userRepo.save(user);
         if(user.getBalance() > 0)
         {
@@ -121,20 +124,25 @@ public class UserController {
     {
         User user = userRepo.findById(userId)
                 .orElseThrow(()-> new RuntimeException("Not found"));
+        User user2 = userRepo.findById(adminId)
+                .orElseThrow(()-> new RuntimeException("Not found"));
+        String role = user2.getRole();
         if(user.getBalance() > 0)
         {
             return "Balance should be zero";
         }
         History h1 = new History();
-        h1.setDescription("Admin "+adminId+" Deleted User "+user.getUsername());
+        h1.setDescription(role+" "+user2.getName()+" Deleted User "+user.getName());
         historyRepo.save(h1);
         userRepo.delete(user);
         return "User Deleted Successfully";
     }
 
     @GetMapping("/users")
-    public List<User> getAllUsers(@RequestParam String sortBy, @RequestParam String order)
+    public List<User> getAllUsers(@RequestParam String sortBy, @RequestParam String order, @RequestParam int id)
     {
+        User user1 = userRepo.findById(id)
+                .orElseThrow(()-> new RuntimeException("Not found"));
         Sort sort;
         if(order.equalsIgnoreCase("desc"))
         {
@@ -144,7 +152,15 @@ public class UserController {
         {
             sort = Sort.by(sortBy).ascending();
         }
-        return userRepo.findAllByRole("customer", sort);
+        if(user1.getRole().equalsIgnoreCase("Admin"))
+        {
+            return userRepo.findAllByRoleIn(List.of("customer"),sort);
+        }
+        if(user1.getRole().equalsIgnoreCase("Manager"))
+        {
+            return userRepo.findAllByRoleIn(List.of("customer", "admin"),sort);
+        }
+        return List.of();
     }
 
     @GetMapping("/users/{keyword}")

@@ -697,7 +697,7 @@
 <div class="container">
     <div class="header">
         <div class="header-left">
-            <h1>VBS Admin</h1>
+            <h1>VBS Manager</h1>
             <p>Virtual Banking System - Administration Panel</p>
         </div>
         <div class="header-buttons">
@@ -710,7 +710,7 @@
         <div id="adminMessage" class="message"></div>
 
         <div class="admin-header">
-            <h2>Admin Dashboard</h2>
+            <h2>Manager Dashboard</h2>
             <button class="btn-add-user" onclick="openAddUserModal()">
                 ➕ Add New User
             </button>
@@ -885,7 +885,7 @@
         return;
     }
 
-    if (role !== 'admin') {
+    if (role !== 'manager') {
         alert("Unauthorized access");
         window.location.href = 'login.html';
     }
@@ -897,16 +897,16 @@
         try {
             const response = await fetch(`${API_URL}/users?sortBy=${sortBy}&order=${order}&id=${userId}`);
             if (!response.ok) throw new Error('Failed to load users');
-            
+
             allUsers = await response.json();
             filteredUsers = [...allUsers];
             currentSortBy = sortBy;
             currentSortOrder = order;
-            
+
             // Update dropdown values
             document.getElementById('sortBy').value = sortBy;
             document.getElementById('sortOrder').value = order;
-            
+
             updateStatistics();
             displayUsers(filteredUsers);
         } catch (error) {
@@ -1016,7 +1016,7 @@
         // Display pagination
         if (totalPages > 1) {
             let paginationHTML = '';
-            
+
             if (currentPage > 1) {
                 paginationHTML += `<button onclick="goToPage(${currentPage - 1})">← Previous</button>`;
             }
@@ -1112,7 +1112,7 @@
         }, 3000);
     }
 
-  
+
     function logout() {
         window.location.href = 'home.html';
     }
@@ -1193,7 +1193,7 @@
 
     function confirmDeleteUser(id, name) {
         userToDeleteId = id;
-        document.getElementById('deleteConfirmText').textContent = 
+        document.getElementById('deleteConfirmText').textContent =
             `Are you sure you want to delete "${name}"? This action cannot be undone.`;
         document.getElementById('deleteConfirmDialog').classList.add('show');
     }
@@ -1204,7 +1204,7 @@
         userToDeleteId = null;
     }
 
-   
+
     async function deleteUser() {
         if (!userToDeleteId) return;
 
@@ -1246,7 +1246,7 @@
         const viewModal = document.getElementById('viewUserModal');
         const addModal = document.getElementById('addUserModal');
         const deleteDialog = document.getElementById('deleteConfirmDialog');
-        
+
         if (e.target === viewModal) {
             viewModal.classList.remove('show');
         }

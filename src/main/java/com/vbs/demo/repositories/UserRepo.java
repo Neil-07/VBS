@@ -16,4 +16,6 @@ public interface UserRepo extends JpaRepository<User, Integer> {
     List<User> findAllByRole(String customer, Sort sort);
 
     List<User> findByUsernameContainingIgnoreCaseAndRole(String keyword, String customer);
+
+    List<User> findAllByRoleIn(List<String> customer, Sort sort);
 }
