@@ -90,6 +90,11 @@
             color: #333;
             font-size: 24px;
         }
+        .admin-header-buttons {
+            display: flex;
+            gap: 10px; /* Adjust for desired closeness */
+            align-items: center;
+        }
 
         .stats-grid {
             display: grid;
@@ -702,6 +707,7 @@
         </div>
         <div class="header-buttons">
             <button class="btn-header" onclick="goToHistory()">History</button>
+
             <button class="btn-header" onclick="logout()">Logout</button>
         </div>
     </div>
@@ -711,10 +717,16 @@
 
         <div class="admin-header">
             <h2>Manager Dashboard</h2>
-            <button class="btn-add-user" onclick="openAddUserModal()">
-                ➕ Add New User
-            </button>
+            <div class="admin-header-buttons">
+                <button class="btn-add-user" onclick="goToManagerChat()">
+                    Support 🔧
+                </button>
+                <button class="btn-add-user" onclick="openAddUserModal()">
+                    ➕ Add New User
+                </button>
+            </div>
         </div>
+
 
         <div class="stats-grid">
             <div class="stat-card">
@@ -1112,6 +1124,10 @@
         }, 3000);
     }
 
+
+    function goToManagerChat() {
+        window.location.href = 'managerChat.html';
+    }
 
     function logout() {
         window.location.href = 'home.html';

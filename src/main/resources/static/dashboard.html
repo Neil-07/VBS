@@ -64,6 +64,11 @@
             color: #667eea;
         }
 
+        .header-buttons {
+            display: flex;
+            gap: 10px; /* Adjust as needed */
+        }
+
         .content {
             padding: 40px 30px;
         }
@@ -437,7 +442,10 @@
             <h1>VBS</h1>
             <p>Virtual Banking System</p>
         </div>
-        <button class="logout-btn" onclick="logout()">Logout</button>
+        <div class="header-buttons">
+            <button class="logout-btn" onclick="goToUserChat()">Support</button>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
     </div>
 
     <div class="content">
@@ -739,6 +747,10 @@
                 console.error(error);
             }
         });
+    }
+
+    function goToUserChat() {
+        window.location.href = 'userChat.html';
     }
 
     function logout() {
