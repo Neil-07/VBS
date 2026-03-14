@@ -6,143 +6,57 @@
   <title>Passbook - Virtual Banking System</title>
 
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-
-    body{
-        font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-        background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-        min-height:100vh;
-        padding:20px
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
 
-    .container{
-        max-width:1000px;
-        margin:auto;
-        background:#fff;
-        border-radius:16px;
-        box-shadow:0 20px 60px rgba(0,0,0,.3);
-        overflow:hidden
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: #f1f5f9;
     }
 
-    .header{
-        background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-        padding:30px;
-        color:#fff;
-        display:flex;
-        justify-content:space-between;
-        align-items:center
+    .container {
+        max-width: 1000px;
+        margin: auto;
+        background: #1e293b;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
     }
 
-    .header-left h1{font-size:28px}
-    .header-left p{font-size:14px;opacity:.9}
-
-    .btn-header{
-        padding:10px 20px;
-        border:2px solid #fff;
-        background:rgba(255,255,255,.2);
-        color:#fff;
-        border-radius:8px;
-        cursor:pointer;
-        font-weight:600;
-        text-decoration:none;
-        transition:.3s
-    }
-
-    .btn-header:hover{background:#fff;color:#667eea}
-
-    .content{padding:40px 30px}
-
-    .passbook-header{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        margin-bottom:30px
-    }
-
-    .balance-card{
-        background:linear-gradient(135deg,#667eea,#764ba2);
-        color:#fff;
-        padding:20px 30px;
-        border-radius:10px
-    }
-
-    .balance-card .amount{font-size:28px;font-weight:700}
-
-    .transactions-section{
-        background:#f8f9fa;
-        padding:30px;
-        border-radius:12px
-    }
-
-    .transactions-list{display:flex;flex-direction:column;gap:10px}
-
-    .transaction-item{
-        background:#fff;
-        padding:18px;
-        border-radius:10px;
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        border-left:5px solid #667eea;
-        box-shadow:0 2px 8px rgba(0,0,0,.05)
-    }
-
-    .transaction-item.deposit{border-left-color:#43e97b}
-    .transaction-item.withdrawal{border-left-color:#f5576c}
-    .transaction-item.transfer{border-left-color:#4facfe}
-
-    .transaction-info{display:flex;gap:15px;align-items:center}
-
-    .transaction-icon{
-        width:45px;height:45px;
-        border-radius:50%;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:22px
-    }
-
-    .deposit .transaction-icon{background:#d4f8e8;color:#43e97b}
-    .withdrawal .transaction-icon{background:#fde0e5;color:#f5576c}
-    .transfer .transaction-icon{background:#d4e7ff;color:#4facfe}
-
-    .transaction-details .type{font-weight:600;color:#333}
-    .transaction-details .date{font-size:12px;color:#999}
-
-    .transaction-right{text-align:right}
-
-    .transaction-amount{font-size:16px;font-weight:700}
-    .deposit .transaction-amount{color:#43e97b}
-    .withdrawal .transaction-amount{color:#f5576c}
-    .transfer .transaction-amount{color:#4facfe}
-
-    .balance-display{font-size:12px;color:#999}
-
-    .pagination{
-        margin-top:20px;
-        display:flex;
-        justify-content:center;
-        gap:10px
-    }
-
-    .pagination button{
-        padding:8px 12px;
-        border:1px solid #ddd;
-        border-radius:6px;
-        cursor:pointer
-    }
-
-    .pagination .active{
-        background:#667eea;
-        color:#fff;
-        border-color:#667eea
-    }
-    .header > div {
+    .header {
+        background: linear-gradient(135deg, #3730a3 0%, #4338ca 100%);
+        padding: 30px;
+        color: #fff;
         display: flex;
-        gap: 10px;
+        justify-content: space-between;
+        align-items: center;
     }
 
-    .btn-header{
+    .header-left h1 {
+        font-size: 28px;
+    }
+
+    .header-left p {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    .btn-header {
+        padding: 10px 20px;
+        border: 2px solid #fff;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.3s;
         min-width: 130px;
         height: 42px;
         display: inline-flex;
@@ -150,9 +64,156 @@
         justify-content: center;
     }
 
+    .btn-header:hover {
+        background: #fff;
+        color: #3730a3;
+    }
 
-    .message{display:none;margin-bottom:20px}
-    .message.show{display:block}
+    .content {
+        padding: 40px 30px;
+    }
+
+    .passbook-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .balance-card {
+        background: linear-gradient(135deg, #3730a3, #4338ca);
+        color: #fff;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .balance-card .amount {
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    .transactions-section {
+        background: #0f172a;
+        padding: 30px;
+        border-radius: 12px;
+    }
+
+    .transactions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .transaction-item {
+        background: #1e293b;
+        padding: 18px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-left: 5px solid #6366f1;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s;
+    }
+
+    .transaction-item:hover {
+        transform: scale(1.01);
+        background: #2d3748;
+    }
+
+    .transaction-item.deposit { border-left-color: #10b981; }
+    .transaction-item.withdrawal { border-left-color: #ef4444; }
+    .transaction-item.transfer { border-left-color: #3b82f6; }
+
+    .transaction-info {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .transaction-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .deposit .transaction-icon { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+    .withdrawal .transaction-icon { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    .transfer .transaction-icon { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+
+    .transaction-details .type {
+        font-weight: 600;
+        color: #f1f5f9;
+    }
+
+    .transaction-details .date {
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    .transaction-right {
+        text-align: right;
+    }
+
+    .transaction-amount {
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .deposit .transaction-amount { color: #10b981; }
+    .withdrawal .transaction-amount { color: #ef4444; }
+    .transfer .transaction-amount { color: #3b82f6; }
+
+    .balance-display {
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    .pagination {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .pagination button {
+        padding: 8px 12px;
+        background: #334155;
+        border: 1px solid #475569;
+        color: #f1f5f9;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .pagination button:hover {
+        background: #475569;
+    }
+
+    .pagination .active {
+        background: #6366f1;
+        color: #fff;
+        border-color: #6366f1;
+    }
+
+    .header > div {
+        display: flex;
+        gap: 10px;
+    }
+
+    .message {
+        display: none;
+        margin-bottom: 20px;
+    }
+
+    .message.show {
+        display: block;
+    }
   </style>
 </head>
 

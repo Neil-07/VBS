@@ -13,7 +13,8 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
             min-height: 100vh;
             padding: 20px;
         }
@@ -22,16 +23,17 @@
             width: 100%;
             max-width: 900px;
             margin: 0 auto;
-            background: white;
+            background: #1e293b;
             border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             overflow: hidden;
+            border: 1px solid #334155;
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3730a3 0%, #4338ca 100%);
             padding: 30px;
-            color: white;
+            color: #f1f5f9;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -40,19 +42,20 @@
         .header-left h1 {
             font-size: 28px;
             margin-bottom: 5px;
+            color: #f1f5f9;
         }
 
         .header-left p {
             font-size: 14px;
-            opacity: 0.9;
+            color: #94a3b8;
         }
 
 
         .logout-btn {
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid white;
+            background: rgba(255, 255, 255, 0.1);
+            color: #f1f5f9;
+            border: 1px solid #f1f5f9;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
@@ -60,13 +63,13 @@
         }
 
         .logout-btn:hover {
-            background: white;
-            color: #667eea;
+            background: #f1f5f9;
+            color: #3730a3;
         }
 
         .header-buttons {
             display: flex;
-            gap: 10px; /* Adjust as needed */
+            gap: 10px;
         }
 
         .content {
@@ -79,40 +82,46 @@
         }
 
         .dashboard-header h2 {
-            color: #333;
+            color: #f1f5f9;
             font-size: 24px;
             margin-bottom: 10px;
         }
 
+        .dashboard-header p {
+            color: #94a3b8;
+        }
+
         .user-info {
-            background: #f8f9fa;
+            background: #0f172a;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 30px;
+            border: 1px solid #334155;
         }
 
         .user-info p {
-            color: #666;
+            color: #94a3b8;
             margin: 8px 0;
             font-size: 14px;
         }
 
         .user-info strong {
-            color: #333;
+            color: #f1f5f9;
         }
 
         .account-balance {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #3730a3 0%, #4338ca 100%);
+            color: #f1f5f9;
             padding: 30px;
             border-radius: 12px;
             text-align: center;
             margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(55, 48, 163, 0.3);
         }
 
         .account-balance p {
             font-size: 14px;
-            opacity: 0.9;
+            color: #94a3b8;
             margin-bottom: 10px;
         }
 
@@ -142,89 +151,47 @@
             gap: 10px;
         }
 
+        .btn-action {
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
         .btn-withdraw {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
         }
 
         .btn-withdraw:hover {
-            transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
         }
 
         .btn-deposit {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
         }
 
         .btn-deposit:hover {
-            transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
         }
 
         .btn-transfer {
             background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            color: white;
         }
 
         .btn-transfer:hover {
-            transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(67, 233, 123, 0.4);
         }
 
-        .btn-icon {
-            font-size: 24px;
+        .btn-passbook {
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
         }
 
-        .transactions-section {
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 12px;
-        }
-
-        .transactions-section h3 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-
-        .transaction-item {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid #667eea;
-        }
-
-        .transaction-info p {
-            margin: 3px 0;
-            font-size: 14px;
-        }
-
-        .transaction-info .type {
-            color: #333;
-            font-weight: 600;
-        }
-
-        .transaction-info .date {
-            color: #999;
-            font-size: 12px;
-        }
-
-        .transaction-amount {
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .transaction-amount.debit {
-            color: #f5576c;
-        }
-
-        .transaction-amount.credit {
-            color: #43e97b;
+        .btn-passbook:hover {
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
         }
 
         .modal {
@@ -235,9 +202,10 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(4px);
         }
 
         .modal.show {
@@ -245,18 +213,19 @@
         }
 
         .modal-content {
-            background: white;
+            background: #1e293b;
             padding: 30px;
             border-radius: 12px;
             max-width: 400px;
             width: 90%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid #334155;
         }
 
         .modal-header {
             font-size: 20px;
             font-weight: bold;
-            color: #333;
+            color: #f1f5f9;
             margin-bottom: 20px;
         }
 
@@ -267,23 +236,27 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: #333;
+            color: #f1f5f9;
             font-weight: 500;
             font-size: 14px;
         }
 
-        .form-group input {
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 12px 15px;
-            border: 2px solid #e0e0e0;
+            background: #0f172a;
+            border: 1px solid #334155;
             border-radius: 8px;
             font-size: 14px;
+            color: #f1f5f9;
             transition: border-color 0.3s;
         }
 
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #4f46e5;
         }
 
         .modal-buttons {
@@ -302,22 +275,22 @@
         }
 
         .btn-submit {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+            color: #ffffff;
         }
 
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
         }
 
         .btn-cancel {
-            background: #f0f0f0;
-            color: #333;
+            background: #334155;
+            color: #f1f5f9;
         }
 
         .btn-cancel:hover {
-            background: #e0e0e0;
+            background: #475569;
         }
 
         .message {
@@ -329,46 +302,20 @@
         }
 
         .message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
         .message.show {
             display: block;
         }
-
-        .empty-state {
-            text-align: center;
-            color: #999;
-            padding: 20px;
-        }
-        .btn-action {
-    color: white;
-    font-weight: 600;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.btn-action:hover {
-    transform: translateY(-2px);
-}
-
-.btn-passbook {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.btn-passbook:hover {
-    box-shadow: 0 6px 18px rgba(102, 126, 234, 0.45);
-}
-
 
         @media (max-width: 600px) {
             .header {
@@ -380,58 +327,6 @@
             .transaction-buttons {
                 grid-template-columns: 1fr;
             }
-
-            .transaction-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .transaction-amount {
-                align-self: flex-end;
-            }
-            btn-action {
-                color: white;
-                font-weight: 600;
-                border-radius: 8px;
-                transition: all 0.3s ease;
-            }
-
-            .btn-action:hover {
-                transform: translateY(-2px);
-            }
-            .btn-withdraw {
-                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            }
-
-            .btn-withdraw:hover {
-                box-shadow: 0 6px 18px rgba(245, 87, 108, 0.4);
-            }
-
-            .btn-deposit {
-                background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            }
-
-            .btn-deposit:hover {
-                box-shadow: 0 6px 18px rgba(79, 172, 254, 0.4);
-            }
-
-            .btn-transfer {
-                background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            }
-
-            .btn-transfer:hover {
-                box-shadow: 0 6px 18px rgba(67, 233, 123, 0.4);
-            }
-
-            .btn-passbook {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            }
-
-            .btn-passbook:hover {
-                box-shadow: 0 6px 18px rgba(102, 126, 234, 0.45);
-            }
-
-
         }
     </style>
 </head>

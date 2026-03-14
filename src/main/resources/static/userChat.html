@@ -13,12 +13,13 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            color: #f1f5f9;
         }
 
         .container {
@@ -26,16 +27,16 @@
             max-width: 450px;
             height: calc(100vh - 40px);
             max-height: 800px;
-            background: white;
+            background: #1e293b;
             border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3730a3 0%, #4338ca 100%);
             padding: 15px 20px;
             color: white;
             display: flex;
@@ -55,7 +56,7 @@
 
         .btn-back {
             padding: 8px 15px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
             border: 2px solid white;
             border-radius: 8px;
@@ -67,14 +68,14 @@
 
         .btn-back:hover {
             background: white;
-            color: #667eea;
+            color: #3730a3;
         }
 
         .chat-messages {
             flex-grow: 1;
             padding: 20px;
             overflow-y: auto;
-            background: #f8f9fa;
+            background: #0f172a;
             display: flex;
             flex-direction: column;
         }
@@ -90,12 +91,12 @@
             padding: 12px 18px;
             border-radius: 12px;
             line-height: 1.5;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .timestamp {
             font-size: 11px;
-            color: #999;
+            color: #94a3b8;
             margin-top: 5px;
         }
 
@@ -104,7 +105,7 @@
             align-self: flex-end;
         }
         .message.sent .bubble {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
             color: white;
         }
         .message.sent .timestamp {
@@ -116,8 +117,8 @@
             align-self: flex-start;
         }
         .message.received .bubble {
-            background: #e0e0e0;
-            color: #333;
+            background: #334155;
+            color: #f1f5f9;
         }
         .message.received .timestamp {
             align-self: flex-start;
@@ -125,8 +126,8 @@
 
         .chat-input-area {
             padding: 15px;
-            background: white;
-            border-top: 1px solid #e0e0e0;
+            background: #1e293b;
+            border-top: 1px solid #334155;
             display: flex;
             gap: 10px;
         }
@@ -134,15 +135,17 @@
         .chat-input-area input {
             flex: 1;
             padding: 12px 15px;
-            border: 2px solid #e0e0e0;
+            background: #0f172a;
+            border: 2px solid #334155;
             border-radius: 8px;
             font-size: 14px;
+            color: #f1f5f9;
             transition: border-color 0.3s;
         }
 
         .chat-input-area input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #6366f1;
         }
 
         .btn-send {
@@ -153,13 +156,13 @@
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 600;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
             color: white;
         }
 
         .btn-send:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
         }
     </style>
 </head>
@@ -173,6 +176,18 @@
             <a href="dashboard.html" class="btn-back">Back</a>
         </div>
         <div class="chat-messages">
+            <div class="message received">
+                <div class="bubble">Hello! How can I help you today?</div>
+                <div class="timestamp">10:00 AM</div>
+            </div>
+            <div class="message sent">
+                <div class="bubble">Hi, I have a question about my last transaction.</div>
+                <div class="timestamp">10:02 AM</div>
+            </div>
+            <div class="message received">
+                <div class="bubble">Sure, I can help with that. Could you provide the transaction ID?</div>
+                <div class="timestamp">10:05 AM</div>
+            </div>
         </div>
         <div class="chat-input-area">
             <input type="text" placeholder="Type your message...">
