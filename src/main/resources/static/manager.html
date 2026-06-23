@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title><!DOCTYPE html>
-        <html lang="en">
-        <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Admin Panel - Virtual Banking System</title>
+        <title>Manager Panel - Virtual Banking System</title>
     <style>
         * {
             margin: 0;
@@ -685,7 +681,7 @@
     <div class="header">
         <div class="header-left">
             <h1>VBS Manager</h1>
-            <p>Virtual Banking System - Administration Panel</p>
+            <p>Virtual Banking System - Manager Panel</p>
         </div>
         <div class="header-buttons">
             <button class="btn-header" onclick="goToHistory()">History</button>
@@ -1118,7 +1114,7 @@
     function goToHistory() {
         const params = new URLSearchParams();
         if (userId) params.set('id', userId);
-        params.set('role', 'admin');
+        params.set('role', 'manager');
         window.location.href = `history.html?${params.toString()}`;
     }
 
