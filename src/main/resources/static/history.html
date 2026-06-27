@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>History - Virtual Banking System</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -39,11 +35,7 @@
             gap: 20px;
         }
 
-        .header h1 {
-            font-size: 28px;
-            font-weight: 600;
-            color: #f1f5f9;
-        }
+        .header h1 { font-size: 28px; font-weight: 600; color: #f1f5f9; }
 
         .btn-header {
             padding: 10px 20px;
@@ -65,9 +57,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .content {
-            padding: 40px 30px;
-        }
+        .content { padding: 40px 30px; }
 
         .table-wrapper {
             overflow-x: auto;
@@ -103,9 +93,7 @@
             background: #1e293b;
         }
 
-        .history-table tbody tr:hover {
-            background-color: #334155;
-        }
+        .history-table tbody tr:hover { background-color: #334155; }
 
         .history-table td {
             padding: 14px 15px;
@@ -119,11 +107,7 @@
             width: 60px;
         }
 
-        .date {
-            color: #94a3b8;
-            font-size: 12px;
-            white-space: nowrap;
-        }
+        .date { color: #94a3b8; font-size: 12px; white-space: nowrap; }
 
         .history-empty {
             text-align: center;
@@ -133,29 +117,11 @@
         }
 
         @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-
-            .header h1 {
-                font-size: 22px;
-            }
-
-            .history-table th,
-            .history-table td {
-                padding: 10px;
-                font-size: 12px;
-            }
-
-            .content {
-                padding: 20px 15px;
-            }
-
-            .table-wrapper {
-                padding: 10px;
-            }
+            .header { flex-direction: column; gap: 15px; text-align: center; }
+            .header h1 { font-size: 22px; }
+            .history-table th, .history-table td { padding: 10px; font-size: 12px; }
+            .content { padding: 20px 15px; }
+            .table-wrapper { padding: 10px; }
         }
     </style>
 </head>
@@ -164,7 +130,7 @@
     <div class="header">
         <h1>History</h1>
         <div>
-            <button class="btn-header" onclick="goBackToAdmin()">← Back</button>
+            <button class="btn-header" onclick="goBack()">← Back</button>
         </div>
     </div>
     <div class="content">
@@ -195,15 +161,31 @@
     function getUserIdFromURL() {
         const params = new URLSearchParams(window.location.search);
         const urlUserId = params.get('id');
+        const urlRole = params.get('role');
+
         const storedUserId = localStorage.getItem('userId');
+        const storedRole = localStorage.getItem('role');
+
         userId = storedUserId || urlUserId;
+        const role = (storedRole || urlRole || '').toLowerCase();
+
+        // Always keep localStorage in sync
+        if (userId) localStorage.setItem('userId', userId);
+        if (role)   localStorage.setItem('role', role);
     }
 
-    function goBackToAdmin() {
+    // Goes back to the correct dashboard based on role
+    function goBack() {
+        const role = localStorage.getItem('role') || '';
         const params = new URLSearchParams();
         if (userId) params.set('id', userId);
-        params.set('role', 'admin');
-        window.location.href = `admin.html?${params.toString()}`;
+        params.set('role', role);
+
+        if (role === 'manager') {
+            window.location.href = `manager.html?${params.toString()}`;
+        } else {
+            window.location.href = `admin.html?${params.toString()}`;
+        }
     }
 
     async function loadHistories() {

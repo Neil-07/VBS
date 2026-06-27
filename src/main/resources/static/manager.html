@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Manager Panel - Virtual Banking System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Panel - Virtual Banking System</title>
     <style>
         * {
             margin: 0;
@@ -867,8 +867,11 @@
     const storedRole = localStorage.getItem("role");
 
     userId = storedUserId || urlUserId;
-
     const role = (storedRole || urlRole || '').toLowerCase();
+
+    // Persist to localStorage so navigating away and back still works
+    if (userId) localStorage.setItem("userId", userId);
+    if (role) localStorage.setItem("role", role);
 
     if (!userId) {
         window.location.href = 'login.html';
