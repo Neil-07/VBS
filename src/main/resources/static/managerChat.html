@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VBS - Manager Chat</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -50,46 +48,30 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
 
-        .sidebar-header h1 {
-            font-size: 22px;
-        }
+        .sidebar-header h1 { font-size: 22px; }
 
-        .chat-list {
-            flex-grow: 1;
-            overflow-y: auto;
-            background: #0f172a;
-        }
-        
+        .chat-list { flex-grow: 1; overflow-y: auto; background: #0f172a; }
+
         .chat-list-item {
             display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            cursor: pointer;
-            border-bottom: 1px solid #334155;
-            transition: background-color 0.3s;
-        }
-
-        .chat-list-item:hover {
-            background-color: #1e293b;
-        }
-
-        .chat-list-item.active {
-            background-color: #334155;
-        }
-
-        .chat-list-item .user-name {
-            font-weight: 600;
-            color: #f1f5f9;
-        }
-
-        .chat-area {
-            width: 65%;
-            display: flex;
             flex-direction: column;
-            background: #1e293b;
+            padding: 14px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #1e293b;
+            transition: background-color 0.2s;
         }
+
+        .chat-list-item:hover { background-color: #1e293b; }
+        .chat-list-item.active { background-color: #334155; }
+        .chat-list-item .user-name { font-weight: 600; color: #f1f5f9; font-size: 14px; }
+        .chat-list-item .user-username { font-size: 12px; color: #64748b; margin-top: 2px; }
+
+        .sidebar-loading { padding: 20px; text-align: center; color: #64748b; font-size: 13px; }
+
+        .chat-area { width: 65%; display: flex; flex-direction: column; background: #1e293b; }
 
         .header {
             background: linear-gradient(135deg, #3730a3 0%, #4338ca 100%);
@@ -98,17 +80,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
 
-        .header-left h1 {
-            font-size: 22px;
-            margin-bottom: 2px;
-        }
-
-        .header-left p {
-            font-size: 13px;
-            opacity: 0.9;
-        }
+        .header-left h1 { font-size: 20px; margin-bottom: 2px; }
+        .header-left p { font-size: 13px; opacity: 0.85; }
 
         .chat-messages {
             flex-grow: 1;
@@ -119,47 +95,27 @@
             flex-direction: column;
         }
 
-        .message {
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            max-width: 85%;
-        }
+        .placeholder-text { margin: auto; text-align: center; color: #334155; font-size: 15px; }
+
+        .message { margin-bottom: 15px; display: flex; flex-direction: column; max-width: 85%; }
 
         .bubble {
             padding: 12px 18px;
             border-radius: 12px;
             line-height: 1.5;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            word-break: break-word;
         }
 
-        .timestamp {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-top: 5px;
-        }
+        .timestamp { font-size: 11px; color: #94a3b8; margin-top: 5px; }
 
-        .message.sent {
-            align-self: flex-end;
-        }
-        .message.sent .bubble {
-            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-            color: white;
-        }
-        .message.sent .timestamp {
-            align-self: flex-end;
-        }
+        .message.sent { align-self: flex-end; }
+        .message.sent .bubble { background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%); color: white; }
+        .message.sent .timestamp { align-self: flex-end; }
 
-        .message.received {
-            align-self: flex-start;
-        }
-        .message.received .bubble {
-            background: #334155;
-            color: #f1f5f9;
-        }
-        .message.received .timestamp {
-            align-self: flex-start;
-        }
+        .message.received { align-self: flex-start; }
+        .message.received .bubble { background: #334155; color: #f1f5f9; }
+        .message.received .timestamp { align-self: flex-start; }
 
         .chat-input-area {
             padding: 15px;
@@ -167,6 +123,7 @@
             border-top: 1px solid #334155;
             display: flex;
             gap: 10px;
+            flex-shrink: 0;
         }
 
         .chat-input-area input {
@@ -180,10 +137,8 @@
             transition: border-color 0.3s;
         }
 
-        .chat-input-area input:focus {
-            outline: none;
-            border-color: #6366f1;
-        }
+        .chat-input-area input:focus { outline: none; border-color: #6366f1; }
+        .chat-input-area input:disabled { opacity: 0.4; cursor: not-allowed; }
 
         .btn-send {
             padding: 12px 25px;
@@ -197,14 +152,12 @@
             color: white;
         }
 
-        .btn-send:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
-        }
+        .btn-send:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(79,70,229,0.4); }
+        .btn-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
         .btn-back {
             padding: 8px 15px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.1);
             color: white;
             border: 2px solid white;
             border-radius: 8px;
@@ -212,59 +165,161 @@
             font-weight: 600;
             transition: all 0.3s;
             text-decoration: none;
+            font-size: 13px;
         }
 
-        .btn-back:hover {
-            background: white;
-            color: #3730a3;
-        }
+        .btn-back:hover { background: white; color: #3730a3; }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h1>Chats</h1>
-                <a href="manager.html" class="btn-back">Back</a>
-            </div>
-            <div class="chat-list">
-                <div class="chat-list-item active">
-                    <div class="user-name">Neil Joseph</div>
-                </div>
-                <div class="chat-list-item">
-                    <div class="user-name">Neil</div>
-                </div>
-                <div class="chat-list-item">
-                    <div class="user-name">Dylan</div>
-                </div>
-            </div>
+<div class="app-container">
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>Chats</h1>
+            <a href="manager.html" class="btn-back">Back</a>
         </div>
-        <div class="chat-area">
-            <div class="header">
-                <div class="header-left">
-                    <h1>Chat with Neil Joseph</h1>
-                    <p>Online</p>
-                </div>
-            </div>
-            <div class="chat-messages">
-                <div class="message received">
-                    <div class="bubble">Hi, I have a question about my last transaction.</div>
-                    <div class="timestamp">10:02 AM</div>
-                </div>
-                <div class="message sent">
-                    <div class="bubble">Sure, I can help with that. Could you provide the transaction ID?</div>
-                    <div class="timestamp">10:05 AM</div>
-                </div>
-                <div class="message received">
-                    <div class="bubble">Yes, it's TXN123456.</div>
-                    <div class="timestamp">10:07 AM</div>
-                </div>
-            </div>
-            <div class="chat-input-area">
-                <input type="text" placeholder="Type your message...">
-                <button class="btn-send">Send</button>
-            </div>
+        <div class="chat-list" id="chat-list">
+            <div class="sidebar-loading">Loading customers...</div>
         </div>
     </div>
+
+    <div class="chat-area">
+        <div class="header">
+            <div class="header-left">
+                <h1 id="chat-title">Select a customer</h1>
+                <p id="chat-status">—</p>
+            </div>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="placeholder-text">Select a customer from the left to start chatting</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type your message..." disabled>
+            <button class="btn-send" id="btn-send" onclick="sendMessage()" disabled>Send</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const sender = "manager";
+    let currentRoomId = null;
+    let currentSubscription = null;
+
+    // ── WebSocket ────────────────────────────────────────────────
+    const socket = new SockJS('/ws-chat');
+    const stompClient = Stomp.over(socket);
+    stompClient.debug = null;
+
+    stompClient.connect({}, function () {
+        console.log("Manager WebSocket connected");
+    }, function (err) {
+        console.error("WebSocket error:", err);
+    });
+
+    // ── Load customer list from DB ───────────────────────────────
+    const managerId = localStorage.getItem("userId") || 1;
+
+    fetch(`/users?sortBy=name&order=asc&id=${managerId}`)
+        .then(res => res.json())
+        .then(users => {
+            const list = document.getElementById('chat-list');
+            list.innerHTML = '';
+            const customers = users.filter(u => u.role === 'customer');
+
+            if (customers.length === 0) {
+                list.innerHTML = '<div class="sidebar-loading">No customers found</div>';
+                return;
+            }
+
+            customers.forEach(user => {
+                const item = document.createElement('div');
+                item.className = 'chat-list-item';
+                item.innerHTML = `
+                    <div class="user-name">${user.name}</div>
+                    <div class="user-username">@${user.username}</div>
+                `;
+                item.onclick = () => openChat(String(user.id), user.name, user.username, item);
+                list.appendChild(item);
+            });
+        })
+        .catch(err => {
+            console.error("Failed to load customers:", err);
+            document.getElementById('chat-list').innerHTML =
+                '<div class="sidebar-loading">Failed to load customers</div>';
+        });
+
+    // ── Open a chat and load history ─────────────────────────────
+    function openChat(roomId, name, username, element) {
+        currentRoomId = roomId;
+
+        document.getElementById('chat-title').textContent = name;
+        document.getElementById('chat-status').textContent = '@' + username;
+        document.getElementById('chat-messages').innerHTML = '';
+        document.getElementById('chat-input').disabled = false;
+        document.getElementById('btn-send').disabled = false;
+        document.getElementById('chat-input').focus();
+
+        document.querySelectorAll('.chat-list-item').forEach(el => el.classList.remove('active'));
+        element.classList.add('active');
+
+        // Unsubscribe from previous room
+        if (currentSubscription) currentSubscription.unsubscribe();
+
+        // Load history from DB
+        fetch(`/chat/history/${roomId}`)
+            .then(res => res.json())
+            .then(messages => {
+                messages.forEach(msg => {
+                    const type = msg.sender === 'manager' ? 'sent' : 'received';
+                    appendMessage(msg.content, type, msg.timestamp);
+                });
+            })
+            .catch(err => console.error("Failed to load history:", err));
+
+        // Subscribe to live messages for this room
+        currentSubscription = stompClient.subscribe('/topic/chat/' + roomId, function (msg) {
+            const message = JSON.parse(msg.body);
+            // Only append incoming messages (manager's own are shown instantly on send)
+            if (message.sender !== 'manager') {
+                appendMessage(message.content, 'received', message.timestamp);
+            }
+        });
+    }
+
+    // ── Send a message ───────────────────────────────────────────
+    function sendMessage() {
+        if (!currentRoomId) return;
+        const input = document.getElementById('chat-input');
+        const content = input.value.trim();
+        if (!content) return;
+
+        // Show instantly on manager's side
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        appendMessage(content, 'sent', time);
+        input.value = '';
+
+        stompClient.send('/app/chat.send/' + currentRoomId, {}, JSON.stringify({
+            sender: sender,
+            content: content,
+            roomId: currentRoomId
+        }));
+    }
+
+    // ── Append message bubble ────────────────────────────────────
+    function appendMessage(content, type, time) {
+        const box = document.getElementById('chat-messages');
+        const div = document.createElement('div');
+        div.className = 'message ' + type;
+        div.innerHTML = `<div class="bubble">${content}</div><div class="timestamp">${time}</div>`;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    document.getElementById('chat-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') sendMessage();
+    });
+</script>
 </body>
 </html>

@@ -168,4 +168,9 @@ public class UserController {
     {
         return userRepo.findByUsernameContainingIgnoreCaseAndRole(keyword, "customer");
     }
+
+    @GetMapping("/chat-users")
+    public List<User> getChatUsers() {
+        return userRepo.findAllByRole("customer", Sort.by("name").ascending());
+    }
 }

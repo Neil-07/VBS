@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VBS - Chat with Manager</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -42,21 +40,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
 
-        .header-left h1 {
-            font-size: 22px;
-            margin-bottom: 2px;
-        }
-
-        .header-left p {
-            font-size: 13px;
-            opacity: 0.9;
-        }
+        .header-left h1 { font-size: 22px; margin-bottom: 2px; }
+        .header-left p { font-size: 13px; opacity: 0.9; }
 
         .btn-back {
             padding: 8px 15px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.1);
             color: white;
             border: 2px solid white;
             border-radius: 8px;
@@ -66,10 +58,7 @@
             text-decoration: none;
         }
 
-        .btn-back:hover {
-            background: white;
-            color: #3730a3;
-        }
+        .btn-back:hover { background: white; color: #3730a3; }
 
         .chat-messages {
             flex-grow: 1;
@@ -92,37 +81,21 @@
             border-radius: 12px;
             line-height: 1.5;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            word-break: break-word;
         }
 
-        .timestamp {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-top: 5px;
-        }
+        .timestamp { font-size: 11px; color: #94a3b8; margin-top: 5px; }
 
-        /* Sent message */
-        .message.sent {
-            align-self: flex-end;
-        }
+        .message.sent { align-self: flex-end; }
         .message.sent .bubble {
             background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
             color: white;
         }
-        .message.sent .timestamp {
-            align-self: flex-end;
-        }
+        .message.sent .timestamp { align-self: flex-end; }
 
-        /* Received message */
-        .message.received {
-            align-self: flex-start;
-        }
-        .message.received .bubble {
-            background: #334155;
-            color: #f1f5f9;
-        }
-        .message.received .timestamp {
-            align-self: flex-start;
-        }
+        .message.received { align-self: flex-start; }
+        .message.received .bubble { background: #334155; color: #f1f5f9; }
+        .message.received .timestamp { align-self: flex-start; }
 
         .chat-input-area {
             padding: 15px;
@@ -130,6 +103,7 @@
             border-top: 1px solid #334155;
             display: flex;
             gap: 10px;
+            flex-shrink: 0;
         }
 
         .chat-input-area input {
@@ -143,10 +117,7 @@
             transition: border-color 0.3s;
         }
 
-        .chat-input-area input:focus {
-            outline: none;
-            border-color: #6366f1;
-        }
+        .chat-input-area input:focus { outline: none; border-color: #6366f1; }
 
         .btn-send {
             padding: 12px 25px;
@@ -167,32 +138,94 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="header-left">
-                <h1>Chat with Manager</h1>
-                <p>Online</p>
-            </div>
-            <a href="dashboard.html" class="btn-back">Back</a>
+<div class="container">
+    <div class="header">
+        <div class="header-left">
+            <h1>Chat with Manager</h1>
+            <p>Online</p>
         </div>
-        <div class="chat-messages">
-            <div class="message received">
-                <div class="bubble">Hello! How can I help you today?</div>
-                <div class="timestamp">10:00 AM</div>
-            </div>
-            <div class="message sent">
-                <div class="bubble">Hi, I have a question about my last transaction.</div>
-                <div class="timestamp">10:02 AM</div>
-            </div>
-            <div class="message received">
-                <div class="bubble">Sure, I can help with that. Could you provide the transaction ID?</div>
-                <div class="timestamp">10:05 AM</div>
-            </div>
-        </div>
-        <div class="chat-input-area">
-            <input type="text" placeholder="Type your message...">
-            <button class="btn-send">Send</button>
-        </div>
+        <a href="dashboard.html" class="btn-back">Back</a>
     </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Type your message...">
+        <button class="btn-send" onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    // roomId = this customer's user ID (set during login)
+    const roomId = localStorage.getItem("userId");
+    const sender = "user";
+
+    if (!roomId) {
+        alert("Session expired. Please login again.");
+        window.location.href = "login.html";
+    }
+
+    // ── Load chat history from DB on page load ───────────────
+    fetch(`/chat/history/${roomId}`)
+        .then(res => res.json())
+        .then(messages => {
+            messages.forEach(msg => {
+                const type = msg.sender === sender ? 'sent' : 'received';
+                appendMessage(msg.content, type, msg.timestamp);
+            });
+        })
+        .catch(err => console.error("Failed to load history:", err));
+
+    // ── WebSocket connection ─────────────────────────────────
+    const socket = new SockJS('/ws-chat');
+    const stompClient = Stomp.over(socket);
+    stompClient.debug = null;
+
+    stompClient.connect({}, function () {
+        // Subscribe to this customer's private room
+        stompClient.subscribe('/topic/chat/' + roomId, function (msg) {
+            const message = JSON.parse(msg.body);
+            // Only append if received from the OTHER side (manager)
+            // Our own sent messages are already shown instantly
+            if (message.sender !== sender) {
+                appendMessage(message.content, 'received', message.timestamp);
+            }
+        });
+    }, function (err) {
+        console.error("WebSocket error:", err);
+    });
+
+    // ── Send a message ───────────────────────────────────────
+    function sendMessage() {
+        const input = document.getElementById('chat-input');
+        const content = input.value.trim();
+        if (!content) return;
+
+        // Show instantly on sender's side
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        appendMessage(content, 'sent', time);
+        input.value = '';
+
+        // Send via WebSocket (server saves to DB and broadcasts)
+        stompClient.send('/app/chat.send/' + roomId, {}, JSON.stringify({
+            sender: sender,
+            content: content,
+            roomId: roomId
+        }));
+    }
+
+    // ── Append a message bubble ──────────────────────────────
+    function appendMessage(content, type, time) {
+        const box = document.getElementById('chat-messages');
+        const div = document.createElement('div');
+        div.className = 'message ' + type;
+        div.innerHTML = `<div class="bubble">${content}</div><div class="timestamp">${time}</div>`;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    // Send on Enter key
+    document.getElementById('chat-input').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') sendMessage();
+    });
+</script>
 </body>
 </html>
